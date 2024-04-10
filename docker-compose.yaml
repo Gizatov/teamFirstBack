@@ -6,5 +6,22 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    networks:
+      - some
     ports:
       - "5432:5432"
+
+  sdudent-api:
+    image: api-v2
+#    build: 'sdudent-api'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      server.port: 8030
+    networks:
+      - some
+    container_name: sdudent-api
+#    network_mode: 'host'
+
+networks:
+  some:
+    driver: bridge
