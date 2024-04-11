@@ -54,6 +54,9 @@ public class AuthenticationService {
 
         // Верните ответ с токеном
         return AuthenticationResponse.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .role(user.getRole().getRole_name())
                 .token(jwtToken)
                 .build();
     }
