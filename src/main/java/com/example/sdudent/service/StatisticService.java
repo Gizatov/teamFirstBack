@@ -21,10 +21,10 @@ public class StatisticService {
 
         int roleId = countUsersByRole(3);
 
-        int roleFourCount = countUsersByCourse(String.valueOf(4),3);
-        int roleThreeCount = countUsersByCourse(String.valueOf(3),3);
-        int roleTwoCount = countUsersByCourse(String.valueOf(2),3);
-        int roleOneCount = countUsersByCourse(String.valueOf(1),3);
+        int roleFourCount = countUsersByCourse(4,3);
+        int roleThreeCount = countUsersByCourse(3,3);
+        int roleTwoCount = countUsersByCourse(2,3);
+        int roleOneCount = countUsersByCourse(1,3);
 
         int totalVoters = countUniqueStudentIds();
         int totalCandidates = countUsersByRole(2);
@@ -54,8 +54,8 @@ public class StatisticService {
         String sql = "SELECT COUNT(*) FROM Users WHERE role_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, roleId);
     }
-    private int countUsersByCourse(String course, int roleId) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE faculty = ? AND role_id = ?";
+    private int countUsersByCourse(int course, int roleId) {
+        String sql = "SELECT COUNT(*) FROM Users WHERE course = ? AND role_id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, course,roleId);
     }
     private int countUniqueStudentIds() {

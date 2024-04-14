@@ -12,5 +12,8 @@
         <sqlFile path="classpath:/db/general/10.04.2024_insert_into_roles_table.sql" relativeToChangelogFile="false" splitStatements="true"/>
     </changeSet>
 
+    <changeSet author="Arnur" id="4">
+        <sqlFile path="classpath:/db/general/13.04.2024_alter_table_on_delete.sql" relativeToChangelogFile="false" splitStatements="true"/>
+    </changeSet>
 
 </databaseChangeLog>

@@ -1,11 +1,14 @@
 package com.example.sdudent.service;
 
+import com.example.sdudent.entity.StudentVoice;
 import com.example.sdudent.entity.User;
+import com.example.sdudent.repository.StudentVoiceRepository;
 import com.example.sdudent.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {

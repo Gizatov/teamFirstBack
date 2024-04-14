@@ -41,7 +41,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())  // Предполагается, что у вас есть поле role в RegisterRequest
                 .gender(request.getGender()) // Добавьте обработку поля gender
-                .course(request.getCourse()) // Добавьте обработку поля course
+                .course(Integer.parseInt(request.getCourse())) // Добавьте обработку поля course
                 .faculty(request.getFaculty()) // Добавьте обработку поля faculty
                 .student_id(request.getStudentId()) // Добавьте обработку поля studentId
                 .build();
