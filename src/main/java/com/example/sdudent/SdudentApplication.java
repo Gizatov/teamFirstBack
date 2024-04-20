@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SdudentApplication {
 
     public static void main(String[] args) {
+        // This line runs the Spring Boot application
         SpringApplication.run(SdudentApplication.class, args);
     }
 

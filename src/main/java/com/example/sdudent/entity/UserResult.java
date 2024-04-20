@@ -14,10 +14,11 @@ import jakarta.persistence.*;
 public class UserResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Unique identifier for the user result
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
-    private int userCount;
-}
+    private User user; // Reference to the user associated with the result
 
+    private int userCount; // Count or numerical result associated with the user
+}

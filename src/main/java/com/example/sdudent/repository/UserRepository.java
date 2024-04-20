@@ -10,14 +10,17 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+    // Method to find a user by email
     Optional<User> findByEmail(String email);
 
+    // Method to find all users
     List<User> findAll();
+
+    // Custom native query method to find all candidates
     @Query(value = "SELECT * FROM users\n" +
             "where role_id = 2", nativeQuery = true)
     List<User> findAllCandidate();
 
+    // Method to find a user by ID
     User findById(Long id);
-
-
 }

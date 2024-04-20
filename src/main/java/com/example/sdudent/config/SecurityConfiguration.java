@@ -21,14 +21,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+    // Importing necessary classes and libraries
+    // Configuration class for Spring Security
+    // Enables method-level security annotations globally
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    // Configures security filter chain for HTTP requests
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Disables CSRF protection
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers("/auth/**")
@@ -39,18 +43,19 @@ public class SecurityConfiguration {
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> {
                     httpSecuritySessionManagementConfigurer
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Configures session management to be stateless
                 })
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
-                                    authException.printStackTrace();
-                                    response.sendError(HttpStatus.UNAUTHORIZED.value());
+                                    authException.printStackTrace(); // Prints stack trace of authentication exceptions
+                                    response.sendError(HttpStatus.UNAUTHORIZED.value()); // Sends HTTP unauthorized status code
                                 }
                         ))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Adds JWT authentication filter before UsernamePasswordAuthenticationFilter
 
+        // Builds and returns the configured security filter chain
         return http.build();
     }
 }

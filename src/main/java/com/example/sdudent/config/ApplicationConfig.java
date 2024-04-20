@@ -17,15 +17,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
+    // Imported classes and libraries
 
+    // Spring configuration
     public final UserRepository userRepository;
 
+    // Configures the user details service for authentication
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    // Configures the authentication provider that interfaces with user details
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -34,11 +38,12 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    // Configures the authentication manager for Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
+    // Configures the password encoder for storing and comparing passwords
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

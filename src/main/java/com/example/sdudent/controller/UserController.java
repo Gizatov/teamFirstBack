@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
-    private final StudentVoiceService studentVoiceService;
-    private final StudentVoiceRepository studentVoiceRepository;
+    private final UserService userService; // User service for user-related operations
+    private final StudentVoiceService studentVoiceService; // Service for student voice-related operations
+    private final StudentVoiceRepository studentVoiceRepository; // Repository for student voice data access
 
     public UserController(UserService userService, StudentVoiceService studentVoiceService, StudentVoiceRepository studentVoiceRepository) {
         this.userService = userService;
@@ -30,35 +30,38 @@ public class UserController {
         this.studentVoiceRepository = studentVoiceRepository;
     }
 
-    // Метод создания нового пользователя
+    // Method to create a new user
     @PostMapping("/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        User createdUser = userService.createUser(user); // Create user using UserService
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // Return ResponseEntity with created user
     }
 
+    // Method to retrieve all users
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        List<User> users = userService.getAllUsers(); // Retrieve all users using UserService
+        return ResponseEntity.ok(users); // Return ResponseEntity with all users
     }
+
+    // Method to retrieve all candidates
     @GetMapping("/candidates")
     public ResponseEntity<List<User>> getAllCandidates() {
-
-        List<User> users = userService.getAllCandidates();
-        return ResponseEntity.ok(users);
+        List<User> users = userService.getAllCandidates(); // Retrieve all candidates using UserService
+        return ResponseEntity.ok(users); // Return ResponseEntity with all candidates
     }
 
+    // Method to retrieve final candidates with vote counts
     @GetMapping("/result")
     public ResponseEntity<List<CandidatesResultDto>> getFinalCandidates() {
-        List<Object[]> results = studentVoiceRepository.countVotesByCandidateId();
+        List<Object[]> results = studentVoiceRepository.countVotesByCandidateId(); // Retrieve vote counts for candidates from repository
 
         List<CandidatesResultDto> candidatesResultDtos = results.stream()
                 .map(objArray -> {
-                    Long candidateId = (Long) objArray[0]; // candidate_id
-                    Long votesCount = (Long) objArray[1]; // votes_count
+                    Long candidateId = (Long) objArray[0]; // Get candidate ID from result object array
+                    Long votesCount = (Long) objArray[1]; // Get vote count from result object array
 
-                    // Получаем пользователя по candidateId из таблицы пользователей
+                    // Get candidate user by ID from UserService
                     User candidate = userService.getCandidateById(candidateId);
                     if (candidate != null) {
                         String candidateName = candidate.getName();
@@ -66,39 +69,44 @@ public class UserController {
 
                         return new CandidatesResultDto(candidateId, votesCount, candidateName, candidateLastName);
                     } else {
-                        // Если пользователь не найден, создаем DTO только с candidateId и votesCount
+                        // If candidate not found, create DTO with candidateId and votesCount only
                         return new CandidatesResultDto(candidateId, votesCount, null, null);
                     }
                 })
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(candidatesResultDtos);
+        return ResponseEntity.ok(candidatesResultDtos); // Return ResponseEntity with candidate result DTOs
     }
+
+    // Method to retrieve the chosen candidate by the current user
     @GetMapping("/candidate")
     public ResponseEntity<User> getChoiceCandidate() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        Long candidateId = studentVoiceService.getCandidate(currentUser.getId());
-        User candidate = userService.getCandidateById(candidateId);
-        return ResponseEntity.ok(candidate);
+        Long candidateId = studentVoiceService.getCandidate(currentUser.getId()); // Get chosen candidate ID by current user
+        User candidate = userService.getCandidateById(candidateId); // Get candidate user by ID
+        return ResponseEntity.ok(candidate); // Return ResponseEntity with chosen candidate
     }
 
+    // Method to retrieve a user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+        User user = userService.getUserById(id); // Retrieve user by ID using UserService
+        return ResponseEntity.ok(user); // Return ResponseEntity with user
     }
 
+    // Method to update a user
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        return ResponseEntity.ok(updatedUser);
+        User updatedUser = userService.updateUser(id, user); // Update user using UserService
+        return ResponseEntity.ok(updatedUser); // Return ResponseEntity with updated user
     }
 
+    // Method to delete a user
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        userService.deleteUser(id); // Delete user by ID using UserService
+        return ResponseEntity.noContent().build(); // Return ResponseEntity with no content
     }
 }
 

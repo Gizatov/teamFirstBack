@@ -1,6 +1,5 @@
 package com.example.sdudent.service;
 
-
 import com.example.sdudent.config.JwtService;
 import com.example.sdudent.dto.AuthenticationRequest;
 import com.example.sdudent.dto.AuthenticationResponse;
@@ -20,39 +19,38 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository repository;
-
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    // Method to handle user registration
     public AuthenticationResponse register(RegisterRequest request) {
-        // Создайте объект пользователя на основе запроса
+        // Create a user object based on the request
         var user = User.builder()
                 .name(request.getName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())  // Предполагается, что у вас есть поле role в RegisterRequest
-                .gender(request.getGender()) // Добавьте обработку поля gender
-                .course(Integer.parseInt(request.getCourse())) // Добавьте обработку поля course
-                .faculty(request.getFaculty()) // Добавьте обработку поля faculty
-                .student_id(request.getStudentId()) // Добавьте обработку поля studentId
+                .role(request.getRole())  // Assuming you have a role field in RegisterRequest
+                .gender(request.getGender()) // Handle gender field
+                .course(Integer.parseInt(request.getCourse())) // Handle course field
+                .faculty(request.getFaculty()) // Handle faculty field
+                .student_id(request.getStudentId()) // Handle studentId field
                 .build();
 
-        // Сохраните пользователя в репозитории
+        // Save the user in the repository
         repository.save(user);
 
-        // Создайте JWT токен для нового пользователя
+        // Create a JWT token for the new user
         var jwtToken = jwtService.generateToken(user);
 
-        // Верните ответ с токеном
+        // Return the response with the token
         return AuthenticationResponse.builder()
                 .email(user.getEmail())
                 .name(user.getName())
@@ -61,20 +59,21 @@ public class AuthenticationService {
                 .build();
     }
 
+    // Method to handle user authentication
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
-            // Проверяем, существует ли пользователь с указанным email
+            // Check if a user with the specified email exists
             var user = repository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            // Проверяем, совпадает ли введенный пароль с хэшированным паролем пользователя
+            // Check if the entered password matches the user's hashed password
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new BadCredentialsException("Invalid password");
             }
 
-            // Если все проверки пройдены успешно, генерируем токен
+            // If all checks pass, generate a token
             var jwtToken = jwtService.generateToken(user);
 
-            // Возвращаем успешный ответ с JWT-токеном
+            // Return a successful response with the JWT token
             return AuthenticationResponse.builder()
                     .name(user.getName())
                     .email(user.getEmail())
@@ -82,13 +81,12 @@ public class AuthenticationService {
                     .token(jwtToken)
                     .build();
         } catch (AuthenticationException e) {
-            // Обработка ошибок аутентификации
+            // Handle authentication errors
             throw new BadCredentialsException("Invalid email or password", e);
         }
     }
 
-
-
+    // Method to get all users
     public List<User> getAll(){
         return repository.findAll();
     }

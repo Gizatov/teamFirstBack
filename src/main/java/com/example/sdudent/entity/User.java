@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,19 +22,21 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String lastName;
-    private String email;
-    private String password;
-    private String gender;
-    private int course;
-    private String faculty;
-    private Boolean is_activated;
-    @ManyToOne(fetch = FetchType.EAGER) // Множество пользователей могут иметь одну роль
-    @JoinColumn(name = "role_id") // Ссылка на колонку role_id в таблице users
-    private Role role;
-    private String student_id;
+    private Long id; // Unique identifier for the user
+
+    private String name; // Name of the user
+    private String lastName; // Last name of the user
+    private String email; // Email of the user
+    private String password; // Password of the user
+    private String gender; // Gender of the user
+    private int course; // Course of the user
+    private String faculty; // Faculty of the user
+    private Boolean is_activated; // Indicates if the user is activated
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role; // Role of the user
+    private String student_id; // Student ID of the user
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(getRole().getRole_name()));

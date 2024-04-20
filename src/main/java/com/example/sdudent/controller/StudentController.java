@@ -32,52 +32,53 @@ public class StudentController {
         this.statisticService = statisticService;
     }
 
+    // Vote for a candidate
     @PostMapping("/vote/{candidateId}")
     public ResponseEntity<String> voteForCandidate(@PathVariable Long candidateId) {
-        // Получаем текущего пользователя
+        // Get the current user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        // Проверяем, что текущий пользователь не кандидат
+        // Check if the current user is not a candidate
         if (currentUser.getRole().getRole_name().equals("candidate")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Кандидаты не могут голосовать.");
         }
 
-        // Создаем запись о голосовании
+        // Create a record of the vote
         StudentVoice studentVoice = new StudentVoice();
         studentVoice.setStudent(currentUser);
 
-        // Получаем пользователя-кандидата по его идентификатору
+        // Get the candidate user by their ID
         User candidate = userService.getUserById(candidateId);
         if (candidate == null) {
             return ResponseEntity.notFound().build();
         }
         studentVoice.setCandidate(candidate);
 
-        // Сохраняем запись о голосовании
+        // Save the vote record
         studentVoiceService.saveStudentVoice(studentVoice);
 
         return ResponseEntity.ok("Голос за кандидата успешно засчитан.");
     }
 
-
-
+    // Check if the current user exists
     @GetMapping("/currentUserExists")
     public ResponseEntity<Map<String, Boolean>> checkIfCurrentUserExists() {
-        // Получаем текущего пользователя
+        // Get the current user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        // Проверяем, существует ли текущий пользователь в базе данных
+        // Check if the current user exists in the database
         boolean exists = studentVoiceService.checkIfStudentExists(currentUser.getId());
 
-        // Формируем объект JSON с ключом "isExist"
+        // Construct a JSON object with the key "isExist"
         Map<String, Boolean> response = new HashMap<>();
         response.put("isExist", exists);
 
         return ResponseEntity.ok(response);
     }
 
+    // Get statistics
     @GetMapping("/statistics")
     public ResponseEntity<StatisticDto> getStatistic() {
         StatisticDto statisticDto = statisticService.getStatistic();

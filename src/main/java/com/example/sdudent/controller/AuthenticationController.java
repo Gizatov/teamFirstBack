@@ -13,22 +13,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
+    // Importing necessary classes and libraries
+
+    // Controller class for handling authentication-related requests
 
     private final AuthenticationService authenticationService;
 
+    // Handles registration requests
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+        return ResponseEntity.ok(authenticationService.register(request)); // Returns ResponseEntity with registration response
     }
 
+    // Handles authentication requests
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationService.authenticate(request)); // Returns ResponseEntity with authentication response
     }
 
+    // Handles getting all users (for testing purposes)
     @GetMapping("/get")
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(authenticationService.getAll());
+        return ResponseEntity.ok(authenticationService.getAll()); // Returns ResponseEntity with all users
     }
 
 }

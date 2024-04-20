@@ -11,8 +11,9 @@ public class AppError {
     private Date timestamp;
 
     public AppError(int status, String message) {
+        // Constructor for creating an AppError object with status code and message
         this.status = status;
         this.message = message;
-        this.timestamp = new Date();
+        this.timestamp = new Date(); // Set the timestamp to the current date and time
     }
 }

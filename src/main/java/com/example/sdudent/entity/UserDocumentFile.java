@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "users_document_file")
 @Data
@@ -15,15 +14,15 @@ import jakarta.persistence.*;
 public class UserDocumentFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Unique identifier for the user document file
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User user; // Reference to the user associated with the document file
 
     @ManyToOne
     @JoinColumn(name = "document_id")
-    private DocumentList documentList;
-    private String fileId;
-}
+    private DocumentList documentList; // Reference to the document list associated with the file
 
+    private String fileId; // ID of the file
+}

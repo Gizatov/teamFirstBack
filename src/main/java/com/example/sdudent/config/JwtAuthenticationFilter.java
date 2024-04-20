@@ -21,9 +21,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    // Importing necessary classes and libraries
+    // Component responsible for filtering and authenticating JWT tokens
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    // Filters incoming requests, extracts JWT, and authenticates users
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
