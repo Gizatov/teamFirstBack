@@ -39,7 +39,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())  // Assuming you have a role field in RegisterRequest
                 .gender(request.getGender()) // Handle gender field
-                .course(Integer.parseInt(request.getCourse())) // Handle course field
+                .course(request.getCourse()) // Handle course field
                 .faculty(request.getFaculty()) // Handle faculty field
                 .student_id(request.getStudentId()) // Handle studentId field
                 .build();

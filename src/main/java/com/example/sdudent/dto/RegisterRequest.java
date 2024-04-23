@@ -16,7 +16,7 @@ public class RegisterRequest {
     private String email; // Email of the user
     private String password; // Password of the user
     private String gender; // Gender of the user
-    private String course; // Course of the user
+    private int course; // Course of the user
     private String faculty; // Faculty of the user
     private String studentId; // Student ID of the user
     private Role role; // Role of the user
