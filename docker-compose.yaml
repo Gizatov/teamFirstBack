@@ -1,5 +1,19 @@
 version: "3.8"
 services:
+  backend:
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sdu
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"
+    depends_on:
+      - postgres
+
   postgres:
     container_name: postgres
     image: postgres

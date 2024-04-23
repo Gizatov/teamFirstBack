@@ -5,9 +5,9 @@ jwt:
   lifetime: 180m
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/sdu}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    url: jdbc:postgresql://localhost:5432/sdu
+    username: postgres
+    password: postgres
   liquibase:
       change-log: db/changeLog.xml
   jpa:
