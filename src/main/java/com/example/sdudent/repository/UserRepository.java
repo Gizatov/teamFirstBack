@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // Custom native query method to find all candidates
     @Query(value = "SELECT * FROM users\n" +
-            "where role_id = 2", nativeQuery = true)
+            "where role_id = 2 AND event_id is not null", nativeQuery = true)
     List<User> findAllCandidate();
 
     // Method to find a user by ID

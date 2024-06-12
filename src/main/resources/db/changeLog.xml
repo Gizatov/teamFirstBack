@@ -16,4 +16,14 @@
         <sqlFile path="classpath:/db/general/13.04.2024_alter_table_on_delete.sql" relativeToChangelogFile="false" splitStatements="true"/>
     </changeSet>
 
+    <changeSet author="Arnur" id="5">
+        <sqlFile path="classpath:/db/general/08.04.2024_create_events_table.sql" relativeToChangelogFile="false" splitStatements="true"/>
+    </changeSet>
+    <changeSet author="Arnur" id="6">
+        <sqlFile path="classpath:/db/general/09.05.2024_drop_column.sql" relativeToChangelogFile="false" splitStatements="true"/>
+    </changeSet>
+    <changeSet author="Arnur" id="7">
+        <sqlFile path="classpath:/db/general/23.05.2024_alter_constraint_email_uniq.sql" relativeToChangelogFile="false" splitStatements="true"/>
+    </changeSet>
+
 </databaseChangeLog>

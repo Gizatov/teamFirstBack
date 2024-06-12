@@ -20,9 +20,9 @@ public class UserDocumentFile {
     @JoinColumn(name = "user_id")
     private User user; // Reference to the user associated with the document file
 
-    @ManyToOne
-    @JoinColumn(name = "document_id")
-    private DocumentList documentList; // Reference to the document list associated with the file
-
-    private String fileId; // ID of the file
+    private String photo;
+    private String about;
+    private String gpa;
+    private String awards;
+    private String clubs;
 }

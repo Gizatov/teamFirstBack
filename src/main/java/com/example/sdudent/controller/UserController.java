@@ -1,8 +1,12 @@
 package com.example.sdudent.controller;
 
-import com.example.sdudent.dto.CandidatesResultDto;
+import com.example.sdudent.dto.*;
+import com.example.sdudent.entity.Events;
 import com.example.sdudent.entity.User;
+import com.example.sdudent.entity.UserDocumentFile;
 import com.example.sdudent.repository.StudentVoiceRepository;
+import com.example.sdudent.repository.UserDocumentFileRepository;
+import com.example.sdudent.service.EventsService;
 import com.example.sdudent.service.StudentVoiceService;
 import com.example.sdudent.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -10,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +27,15 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService; // User service for user-related operations
+    private final EventsService eventsService;
+    private final UserDocumentFileRepository userDocumentFileRepository;
     private final StudentVoiceService studentVoiceService; // Service for student voice-related operations
     private final StudentVoiceRepository studentVoiceRepository; // Repository for student voice data access
 
-    public UserController(UserService userService, StudentVoiceService studentVoiceService, StudentVoiceRepository studentVoiceRepository) {
+    public UserController(UserService userService, EventsService eventsService, UserDocumentFileRepository userDocumentFileRepository, StudentVoiceService studentVoiceService, StudentVoiceRepository studentVoiceRepository) {
         this.userService = userService;
+        this.eventsService = eventsService;
+        this.userDocumentFileRepository = userDocumentFileRepository;
         this.studentVoiceService = studentVoiceService;
         this.studentVoiceRepository = studentVoiceRepository;
     }
@@ -35,6 +45,51 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user); // Create user using UserService
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // Return ResponseEntity with created user
+    }
+    @PostMapping("/createEvents")
+    public ResponseEntity<?> createEvents(@RequestBody EventsDto eventsDto){
+        Events events = eventsService.createEvent(eventsDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(events);
+    }
+
+    @PutMapping("/updateEvents")
+    public ResponseEntity<?> updateEvents(@RequestBody EventsUpdateDto eventsUpdateDto){
+        Events events = eventsService.updateEvent(eventsUpdateDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(events);
+    }
+
+    @GetMapping("/getEvent")
+    public List<Events> getEvent(){
+        try {
+            List<Events> events = eventsService.getEvent();
+            return events;
+        }catch (NullPointerException e){
+            return null ;
+        }
+    }
+    @DeleteMapping("/deleteEvent/{id}")
+    public String deleteEvent(@PathVariable Long id){
+        userService.deleteEvent(id);
+        return "true";
+    }
+
+    @PostMapping("/save-candidate-file")
+    public ResponseEntity<?> saveCandidateFile(@RequestBody CandidateFileDto candidateFileDto){
+        UserDocumentFile userDocumentFile = new UserDocumentFile();
+        userDocumentFile.setPhoto(candidateFileDto.getPhoto());
+        userDocumentFile.setAbout(candidateFileDto.getAbout());
+        userDocumentFile.setGpa(candidateFileDto.getGpa());
+        userDocumentFile.setAwards(candidateFileDto.getAwards());
+        userDocumentFile.setClubs(candidateFileDto.getClubs());
+
+        userDocumentFileRepository.save(userDocumentFile);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Candidate file saved successfully");
+    }
+
+    @PostMapping("/subscribe/userId/{id}/eventsId/{eventsId}/photo/{photo}")
+    public ResponseEntity<?> subscribeToEvent(@PathVariable Long id,@PathVariable Long eventsId,@PathVariable MultipartFile photo) throws IOException {
+        UserDocumentFile userDocumentFile = userService.saveDocumentFile(id,eventsId,photo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDocumentFile);
     }
 
     // Method to retrieve all users

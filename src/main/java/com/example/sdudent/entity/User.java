@@ -26,6 +26,7 @@ public class User implements UserDetails {
 
     private String name; // Name of the user
     private String lastName; // Last name of the user
+    @Column(unique = true)
     private String email; // Email of the user
     private String password; // Password of the user
     private String gender; // Gender of the user
@@ -36,6 +37,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role; // Role of the user
     private String student_id; // Student ID of the user
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Events events;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
