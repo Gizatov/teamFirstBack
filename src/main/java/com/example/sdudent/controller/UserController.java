@@ -55,6 +55,7 @@ public class UserController {
     @PutMapping("/updateEvents")
     public ResponseEntity<?> updateEvents(@RequestBody EventsUpdateDto eventsUpdateDto){
         Events events = eventsService.updateEvent(eventsUpdateDto);
+        System.out.println("updateEvents");
         return ResponseEntity.status(HttpStatus.CREATED).body(events);
     }
 
